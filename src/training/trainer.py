@@ -22,9 +22,9 @@ class RestorationLoss(nn.Module):
         """
         Parameters
         ----------
-        alpha : float, optional
+        - alpha : float, optional
             Weight for the MSE (pixel-wise) term. Default: 1.0.
-        beta : float, optional
+        - beta : float, optional
             Weight for the perceptual (VGG feature) term. Default: 0.1.
         """
         super().__init__()
@@ -42,14 +42,14 @@ class RestorationLoss(nn.Module):
 
         Parameters
         ----------
-        pred : torch.Tensor, required
+        - pred : torch.Tensor, required
             Restored image predicted by the network, shape (B, 3, H, W).
-        target : torch.Tensor, required
+        - target : torch.Tensor, required
             Ground truth image, shape (B, 3, H, W).
 
         Returns
         -------
-        loss : torch.Tensor
+        - loss : torch.Tensor
             Scalar loss value: alpha * MSE + beta * perceptual.
         """
         mse = F.mse_loss(pred, target)
@@ -89,25 +89,25 @@ class Trainer:
 
         Parameters
         ----------
-        input_dir : Path, required
+        - input_dir : Path, required
             Directory containing the original (ground truth) images.
-        compressed_dir : Path, required
+        - compressed_dir : Path, required
             Directory containing the compressed images (network inputs).
-        checkpoints_dir : Path, required
+        - checkpoints_dir : Path, required
             Directory where model checkpoints will be saved.
-        image_size : int, optional
+        - image_size : int, optional
             Spatial size to which all images are resized. Default: 256.
-        base_channels : int, optional
+        - base_channels : int, optional
             Base channel multiplier for ConvAutoencoder. Default: 32.
-        batch_size : int, optional
+        - batch_size : int, optional
             Number of samples per training batch. Default: 8.
-        learning_rate : float, optional
+        - learning_rate : float, optional
             Initial learning rate for Adam optimizer. Default: 1e-3.
-        weight_decay : float, optional
+        - weight_decay : float, optional
             L2 regularization coefficient for Adam. Default: 1e-5.
-        splits : tuple, optional
+        - splits : tuple, optional
             (train, val, test) proportions. Default: (0.70, 0.15, 0.15).
-        seed : int, optional
+        - seed : int, optional
             Random seed for reproducible dataset splitting. Default: 42.
         """
         self.input_dir = Path(input_dir)
@@ -142,9 +142,11 @@ class Trainer:
             lr=learning_rate,
             weight_decay=weight_decay,
         )
+        
         # self.scheduler = optim.lr_scheduler.ReduceLROnPlateau(
         #     self.optimizer, mode="min", patience=5, factor=0.5
         # )
+        
         self.scheduler = optim.lr_scheduler.CosineAnnealingLR(
             self.optimizer, T_max=100, eta_min=1e-6
         )
@@ -165,14 +167,6 @@ class Trainer:
         Reads image pairs from input_dir and compressed_dir, applies resize
         and normalization, and splits them into train/val/test subsets.
         Must be called before train().
-
-        Parameters
-        ----------
-        None
-
-        Returns
-        -------
-        None
         """
         self.dataset = CompressionDataset(
             input_dir=self.input_dir,
@@ -187,12 +181,12 @@ class Trainer:
             seed=self.seed,
         )
 
-        print(f"Device          : {self.device}")
-        print(f"Parameters      : {self.model.count_parameters():,}")
+        print(f"Device : {self.device}")
+        print(f"Parameters : {self.model.count_parameters():,}")
         print(
-            f"Train / Val / Test : "
-            f"{len(self.train_loader.dataset)} / "
-            f"{len(self.val_loader.dataset)} / "
+            f"Train \t| Val \t| Test : \n"
+            f"{len(self.train_loader.dataset)} \t| "
+            f"{len(self.val_loader.dataset)} \t| "
             f"{len(self.test_loader.dataset)}"
         )
 
@@ -205,19 +199,14 @@ class Trainer:
 
         Parameters
         ----------
-        num_epochs : int, optional
+        - num_epochs : int, optional
             Number of training epochs. Default: 50.
 
         Returns
         -------
-        history : dict
+        - history : dict
             Dictionary with keys "train_loss" and "val_loss",
             each containing a list of per-epoch average losses.
-
-        Raises
-        ------
-        RuntimeError
-            If load_dataset() has not been called before train().
         """
         if self.train_loader is None:
             raise RuntimeError("Call load_dataset() before train().")
@@ -275,6 +264,7 @@ class Trainer:
                     f"  |  Val Loss:   {avg_val_loss:.6f}"
                 )
 
-        print(f"\n✓ Training complete. Best val loss: {best_val_loss:.6f}")
-        print(f"  Checkpoint saved: {self.checkpoints_dir / self.checkpoint_name}")
+        print(f"\nTraining complete - Best val loss: {best_val_loss:.6f}")
+        print(f"\nCheckpoint saved: {self.checkpoints_dir / self.checkpoint_name}")
+        
         return self.history

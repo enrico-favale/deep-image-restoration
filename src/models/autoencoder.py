@@ -13,7 +13,6 @@ class ConvAutoencoder(nn.Module):
         ----------
         - base_channes : int, optional
             Number used to create internal architecture (multiplied by: 1, 2, 4, 8)
-
         """
         
         super().__init__()

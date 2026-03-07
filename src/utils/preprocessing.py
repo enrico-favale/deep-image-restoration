@@ -13,8 +13,8 @@ class CompressionDataset(Dataset):
     PyTorch Dataset of (compressed_image, original_image) pairs.
 
     Reads image pairs from disk by matching filenames:
-        data/compressed/ {id}_fourier_25.png  ->  input tensor
-        data/resized/        {id}.jpg              ->  target tensor
+        data/compressed/ {id}_fourier_25.png -> input tensor
+        data/resized/ {id}.jpg -> target tensor
 
     Applies resize and normalization to both images before returning them.
     Inherits from torch.utils.data.Dataset, making it compatible with
@@ -34,26 +34,18 @@ class CompressionDataset(Dataset):
 
         Parameters
         ----------
-        input_dir : Path
+        - input_dir : Path
             Directory containing the original (ground truth) images.
-            Expected naming: {id}.jpg / {id}.jpeg / {id}.png
-        compressed_dir : Path
+        - compressed_dir : Path
             Directory containing the compressed images produced by the
             compression pipeline.
-            Expected naming: {id}_fourier_25.png
-        image_size : int, optional
+        - image_size : int, optional
             Both images are resized to (image_size x image_size) pixels.
-            Default: 256.
-        suffix : str, optional
+        - suffix : str, optional
             Suffix to strip from the compressed filename to recover
             the original image ID.
-            Default: "_fourier_25".
-
-        Raises
-        ------
-        ValueError
-            If no valid pairs are found in compressed_dir.
         """
+        
         self.input_dir = Path(input_dir)
         self.compressed_dir = Path(compressed_dir)
         self.image_size = image_size
@@ -79,13 +71,9 @@ class CompressionDataset(Dataset):
         in input_dir (trying .jpg, .jpeg, .png in order).
         Pairs where the original file does not exist are silently skipped.
 
-        Parameters
-        ----------
-        None
-
         Returns
         -------
-        pairs : List[Tuple[Path, Path]]
+        - pairs : List[Tuple[Path, Path]]
             Ordered list of (compressed_path, raw_path) tuples.
         """
         pairs = []
@@ -105,13 +93,9 @@ class CompressionDataset(Dataset):
         Required by PyTorch's Dataset interface — used internally
         by DataLoader to know how many samples exist.
 
-        Parameters
-        ----------
-        None
-
         Returns
         -------
-        length : int
+        - length : int
             Number of (compressed, original) pairs available.
         """
         return len(self.pairs)
@@ -127,21 +111,23 @@ class CompressionDataset(Dataset):
 
         Parameters
         ----------
-        idx : int
+        - idx : int
             Index of the pair to retrieve (0-based).
 
         Returns
         -------
-        compressed : torch.Tensor
+        - compressed : torch.Tensor
             Compressed image tensor of shape (3, image_size, image_size),
             dtype float32, values in [0.0, 1.0]. This is the network input.
-        original : torch.Tensor
+        - original : torch.Tensor
             Original image tensor of shape (3, image_size, image_size),
             dtype float32, values in [0.0, 1.0]. This is the training target.
         """
+        
         comp_path, raw_path = self.pairs[idx]
         compressed = Image.open(comp_path).convert("RGB")
         original = Image.open(raw_path).convert("RGB")
+        
         return self.transform(compressed), self.transform(original)
 
     def get_pair_names(self, idx: int) -> Tuple[str, str]:
@@ -153,17 +139,19 @@ class CompressionDataset(Dataset):
 
         Parameters
         ----------
-        idx : int
+        - idx : int
             Index of the pair to retrieve (0-based).
 
         Returns
         -------
-        comp_name : str
+        - comp_name : str
             Filename of the compressed image (e.g. "100007_fourier_25.png").
-        raw_name : str
+        - raw_name : str
             Filename of the original image (e.g. "100007.jpg").
         """
+        
         comp_path, raw_path = self.pairs[idx]
+        
         return comp_path.name, raw_path.name
 
 
@@ -182,24 +170,23 @@ def split_dataset(
 
     Parameters
     ----------
-    dataset : CompressionDataset
+    - dataset : CompressionDataset
         The full dataset to split.
-    splits : Tuple[float, float, float], optional
+    - splits : Tuple[float, float, float], optional
         Proportions for (train, val, test). Must sum to 1.0.
-        Default: (0.70, 0.15, 0.15).
-    seed : int, optional
+    - seed : int, optional
         Random seed for reproducible shuffling.
-        Default: 42.
 
     Returns
     -------
-    train_set : torch.utils.data.Subset
+    - train_set : torch.utils.data.Subset
         Subset used for training (~70% of data).
-    val_set : torch.utils.data.Subset
+    - val_set : torch.utils.data.Subset
         Subset used for validation during training (~15% of data).
-    test_set : torch.utils.data.Subset
+    - test_set : torch.utils.data.Subset
         Subset used for final evaluation after training (~15% of data).
     """
+    
     n = len(dataset)
     indices = list(range(n))
     random.seed(seed)
@@ -233,26 +220,26 @@ def get_dataloaders(
 
     Parameters
     ----------
-    dataset : CompressionDataset
+    - dataset : CompressionDataset
         The full dataset to split and load.
-    splits : Tuple[float, float, float], optional
+    - splits : Tuple[float, float, float], optional
         Proportions for (train, val, test). Default: (0.70, 0.15, 0.15).
-    batch_size : int, optional
+    - batch_size : int, optional
         Number of samples per batch. Default: 8.
-    seed : int, optional
+    - seed : int, optional
         Random seed passed to split_dataset. Default: 42.
-    num_workers : int, optional
+    - num_workers : int, optional
         Number of subprocesses for parallel data loading.
         Set to 0 on Windows or if multiprocessing errors occur.
         Default: 2.
 
     Returns
     -------
-    train_loader : torch.utils.data.DataLoader
+    - train_loader : torch.utils.data.DataLoader
         DataLoader over the training subset, with shuffling enabled.
-    val_loader : torch.utils.data.DataLoader
+    - val_loader : torch.utils.data.DataLoader
         DataLoader over the validation subset.
-    test_loader : torch.utils.data.DataLoader
+    - test_loader : torch.utils.data.DataLoader
         DataLoader over the test subset.
     """
     train_set, val_set, test_set = split_dataset(dataset, splits, seed)
