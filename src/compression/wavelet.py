@@ -73,7 +73,7 @@ class WaveletCompressor(BaseCompressor):
 
         compressed_image = Image.fromarray(np.stack(compressed_channels, axis=2))
 
-        parameters = [self.wavelet, self.level, self.threshold]
+        parameters = [self.wavelet, self.level, int(self.threshold)]
         if self.keep_ll_only:
             parameters.append("ll_only")
 
