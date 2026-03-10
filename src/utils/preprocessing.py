@@ -26,7 +26,7 @@ class CompressionDataset(Dataset):
         input_dir: Path,
         compressed_dir: Path,
         image_size: int = 256,
-        suffix: str = "_fourier_25",
+        suffixs: list = ["_fourier_25"],
     ):
         """
         Initializes the dataset by scanning the compressed directory
@@ -49,7 +49,7 @@ class CompressionDataset(Dataset):
         self.input_dir = Path(input_dir)
         self.compressed_dir = Path(compressed_dir)
         self.image_size = image_size
-        self.suffix = suffix
+        self.suffixs = suffixs
 
         self.pairs = self._build_pairs()
         if len(self.pairs) == 0:
@@ -78,7 +78,12 @@ class CompressionDataset(Dataset):
         """
         pairs = []
         for comp_path in sorted(self.compressed_dir.glob("*.png")):
-            raw_id = comp_path.stem.replace(self.suffix, "")
+            for suffix in self.suffixs:
+                name = comp_path.name
+
+                if suffix in name:
+                    raw_id = comp_path.stem.replace(suffix, "")
+                    
             for ext in [".jpg", ".jpeg", ".png"]:
                 raw_path = self.input_dir / (raw_id + ext)
                 if raw_path.exists():

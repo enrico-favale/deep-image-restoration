@@ -180,4 +180,3 @@ dependencies:
       - wcwidth==0.6.0
       - werkzeug==3.1.6
       - zipp==3.23.0
-prefix: /home/enrico/miniconda3/envs/deep-image-restoration
