@@ -182,7 +182,8 @@ class Trainer:
 
         # Log hyperparameters
         self.logger.log_hyperparameters(
-            base_channels=self.model.base_channels or None,
+            base_channels=getattr(self.model, 'base_channels', None),
+            num_blocks=getattr(self.model, 'num_blocks', None),
             image_size=image_size,
             batch_size=batch_size,
             learning_rate=learning_rate,
