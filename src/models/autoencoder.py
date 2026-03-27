@@ -50,9 +50,11 @@ class ConvAutoencoder(nn.Module):
         )
 
         self.final = nn.Sequential(nn.Conv2d(self.base_channels, 3, 1), nn.Sigmoid())
+        
+        self.logger = logger
 
-        if logger is not None:
-            logger.log_architecture(
+        if self.logger is not None:
+            self.logger.log_architecture(
                 model_name=self.__class__.__name__,
                 model_summary=self._build_summary(),
             )

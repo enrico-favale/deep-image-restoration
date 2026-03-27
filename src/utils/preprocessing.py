@@ -26,7 +26,8 @@ class CompressionDataset(Dataset):
         input_dir: Path,
         compressed_dir: Path,
         image_size: int = 256,
-        suffixs: list = ["_fourier_25"],
+        suffixs: List[str] = ["_wavelet_haar_1_20_ll_only", "_fourier_25"],
+        restriction: str = None,
     ):
         """
         Initializes the dataset by scanning the compressed directory
@@ -44,12 +45,18 @@ class CompressionDataset(Dataset):
         - suffix : str, optional
             Suffix to strip from the compressed filename to recover
             the original image ID.
+        - restriction: str, optional
+            Restricion on what data to train. Options are None, "fourier_only", "wavelet_only"
         """
+        
+        if restriction not in [None, "fourier_only", "wavelet_only"]:
+            raise ValueError(f"Invalid restriction: {restriction!r}")
         
         self.input_dir = Path(input_dir)
         self.compressed_dir = Path(compressed_dir)
         self.image_size = image_size
         self.suffixs = suffixs
+        self.restriction = restriction
 
         self.pairs = self._build_pairs()
         if len(self.pairs) == 0:
@@ -76,19 +83,30 @@ class CompressionDataset(Dataset):
         - pairs : List[Tuple[Path, Path]]
             Ordered list of (compressed_path, raw_path) tuples.
         """
+        
         pairs = []
         for comp_path in sorted(self.compressed_dir.glob("*.png")):
-            for suffix in self.suffixs:
-                name = comp_path.name
+            name_lower = comp_path.stem.lower()
+            if self.restriction == "fourier_only" and "fourier" not in name_lower:
+                continue
+            if self.restriction == "wavelet_only" and "wavelet" not in name_lower:
+                continue
 
-                if suffix in name:
+            raw_id = None
+            for suffix in self.suffixs:
+                if suffix in comp_path.name:
                     raw_id = comp_path.stem.replace(suffix, "")
-                    
+                    break
+
+            if raw_id is None:
+                continue
+
             for ext in [".jpg", ".jpeg", ".png"]:
                 raw_path = self.input_dir / (raw_id + ext)
                 if raw_path.exists():
                     pairs.append((comp_path, raw_path))
                     break
+
         return pairs
 
     def __len__(self) -> int:

@@ -84,10 +84,9 @@ class Trainer:
         input_dir: Path,
         compressed_dir: Path,
         checkpoints_dir: Path,
-        logger: Logger,
         checkpoint_name: str = "best_model",
+        model: nn.Module = None,
         image_size: int = 256,
-        base_channels: int = 32,
         batch_size: int = 8,
         learning_rate: float = 1e-3,
         weight_decay: float = 1e-5,
@@ -95,6 +94,7 @@ class Trainer:
         beta: float = 0.1,
         splits: tuple = (0.70, 0.15, 0.15),
         seed: int = 42,
+        train_restriction: str = None,
     ):
         """
         Initialize the Trainer: device, model, optimizer, scheduler, and loss.
@@ -110,14 +110,12 @@ class Trainer:
             Directory containing the compressed images (network inputs).
         - checkpoints_dir: Path, required
             Directory where model checkpoints will be saved.
-        - checkpoint_name: str
+        - checkpoint_name: str, required
             Name for best model to save.
-        - logger: Logger, required
-            Logger instance shared with the model for experiment tracking.
+        - model: nn.Module, required
+            Model to train.
         - image_size: int, optional
             Spatial size to which all images are resized. Default: 256.
-        - base_channels: int, optional
-            Base channel multiplier for ConvAutoencoder. Default: 32.
         - batch_size: int, optional
             Number of samples per training batch. Default: 8.
         - learning_rate: float, optional
@@ -132,17 +130,22 @@ class Trainer:
             (train, val, test) proportions. Default: (0.70, 0.15, 0.15).
         - seed: int, optional
             Random seed for reproducible dataset splitting. Default: 42.
+        - train_restriction: str, optional
+            Restricion on what data to train. Options are None, "fourier_only", "wavelet_only"
         """
-
+        
+        if train_restriction not in [None, "fourier_only", "wavelet_only"]:
+            raise ValueError(f"Invalid restriction: {train_restriction!r}")
+        
         self.input_dir = Path(input_dir)
         self.compressed_dir = Path(compressed_dir)
         self.checkpoints_dir = Path(checkpoints_dir)
-        self.logger = logger
         self.image_size = image_size
         self.batch_size = batch_size
         self.splits = splits
         self.seed = seed
-
+        self.train_restriction = train_restriction
+        
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
         self.checkpoint_name = f"{checkpoint_name}_{timestamp}.pth"
 
@@ -155,10 +158,8 @@ class Trainer:
             self.device = torch.device("cpu")
 
         # Model — logger passed here to capture architecture
-        self.model = ConvAutoencoder(
-            base_channels=base_channels,
-            logger=logger,
-        ).to(self.device)
+        self.logger = model.logger
+        self.model = model.to(self.device)
 
         # Loss — VGG must be on same device as model
         self.criterion = RestorationLoss(alpha=alpha, beta=beta)
@@ -180,8 +181,8 @@ class Trainer:
         )
 
         # Log hyperparameters
-        logger.log_hyperparameters(
-            base_channels=base_channels,
+        self.logger.log_hyperparameters(
+            base_channels=self.model.base_channels or None,
             image_size=image_size,
             batch_size=batch_size,
             learning_rate=learning_rate,
@@ -215,6 +216,7 @@ class Trainer:
             input_dir=self.input_dir,
             compressed_dir=self.compressed_dir,
             image_size=self.image_size,
+            restriction=self.train_restriction,
         )
 
         self.train_loader, self.val_loader, self.test_loader = get_dataloaders(

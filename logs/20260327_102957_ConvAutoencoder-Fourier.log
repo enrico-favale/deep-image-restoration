@@ -1,0 +1,201 @@
+EXPERIMENT LOG — 2026-03-27 10:35:19
+Description: ConvAutoencoder-Fourier
+
+============================================================
+  ARCHITECTURE
+============================================================
+Model: ConvAutoencoder
+ConvAutoencoder(
+  (enc1): Sequential(
+    (0): Conv2d(3, 32, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1))
+    (1): BatchNorm2d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (2): ReLU(inplace=True)
+  )
+  (enc2): Sequential(
+    (0): Conv2d(32, 64, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1))
+    (1): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (2): ReLU(inplace=True)
+  )
+  (enc3): Sequential(
+    (0): Conv2d(64, 128, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1))
+    (1): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (2): ReLU(inplace=True)
+  )
+  (enc4): Sequential(
+    (0): Conv2d(128, 256, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1))
+    (1): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (2): ReLU(inplace=True)
+  )
+  (bottleneck): Sequential(
+    (0): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (1): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (2): ReLU(inplace=True)
+  )
+  (dec4): Sequential(
+    (0): ConvTranspose2d(512, 128, kernel_size=(4, 4), stride=(2, 2), padding=(1, 1))
+    (1): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (2): ReLU(inplace=True)
+  )
+  (dec3): Sequential(
+    (0): ConvTranspose2d(256, 64, kernel_size=(4, 4), stride=(2, 2), padding=(1, 1))
+    (1): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (2): ReLU(inplace=True)
+  )
+  (dec2): Sequential(
+    (0): ConvTranspose2d(128, 32, kernel_size=(4, 4), stride=(2, 2), padding=(1, 1))
+    (1): BatchNorm2d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (2): ReLU(inplace=True)
+  )
+  (dec1): Sequential(
+    (0): ConvTranspose2d(64, 32, kernel_size=(4, 4), stride=(2, 2), padding=(1, 1))
+    (1): BatchNorm2d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (2): ReLU(inplace=True)
+  )
+  (final): Sequential(
+    (0): Conv2d(32, 3, kernel_size=(1, 1), stride=(1, 1))
+    (1): Sigmoid()
+  )
+)
+
+base_channels : 32
+encoder stages : 4  (32 -> 64 -> 128 -> 256)
+bottleneck : 256 channels
+decoder stages : 4  (with skip connections)
+total params : 2,389,859
+
+============================================================
+  HYPERPARAMETERS
+============================================================
+  base_channels: 32
+  image_size: 256
+  batch_size: 4
+  learning_rate: 0.001
+  weight_decay: 0.0001
+  loss_fn: MSE (alpha=1.0) + Perceptual VGG16 (beta=0.1)
+  optimizer: Adam
+  scheduler: CosineAnnealingLR (T_max=100, eta_min=1e-6)
+  device: cuda
+
+============================================================
+  DATASET
+============================================================
+  input_dir: data/resized
+  compressed_dir: data/compressed
+  total_samples: 500
+  train_samples: 350
+  val_samples: 75
+  test_samples: 75
+  image_size: 256
+  splits: (0.7, 0.15, 0.15)
+  seed: 42
+
+============================================================
+  TRAINING LOG
+============================================================
+  Epoch 0001 | Train Loss: 0.234987 | Val Loss: 0.195887
+  Epoch 0002 | Train Loss: 0.182214 | Val Loss: 0.181189
+  Epoch 0003 | Train Loss: 0.173191 | Val Loss: 0.177220
+  Epoch 0004 | Train Loss: 0.167639 | Val Loss: 0.170347
+  Epoch 0005 | Train Loss: 0.165362 | Val Loss: 0.168361
+  Epoch 0006 | Train Loss: 0.163304 | Val Loss: 0.167539
+  Epoch 0007 | Train Loss: 0.160371 | Val Loss: 0.164444
+  Epoch 0008 | Train Loss: 0.158878 | Val Loss: 0.166155
+  Epoch 0009 | Train Loss: 0.157615 | Val Loss: 0.161481
+  Epoch 0010 | Train Loss: 0.157325 | Val Loss: 0.164041
+  Epoch 0011 | Train Loss: 0.155519 | Val Loss: 0.161309
+  Epoch 0012 | Train Loss: 0.154738 | Val Loss: 0.160401
+  Epoch 0013 | Train Loss: 0.153644 | Val Loss: 0.160063
+  Epoch 0014 | Train Loss: 0.152553 | Val Loss: 0.159015
+  Epoch 0015 | Train Loss: 0.151445 | Val Loss: 0.159138
+  Epoch 0016 | Train Loss: 0.149416 | Val Loss: 0.157285
+  Epoch 0017 | Train Loss: 0.149153 | Val Loss: 0.158513
+  Epoch 0018 | Train Loss: 0.148378 | Val Loss: 0.157107
+  Epoch 0019 | Train Loss: 0.147763 | Val Loss: 0.155739
+  Epoch 0020 | Train Loss: 0.148124 | Val Loss: 0.157603
+  Epoch 0021 | Train Loss: 0.146004 | Val Loss: 0.157077
+  Epoch 0022 | Train Loss: 0.144811 | Val Loss: 0.155265
+  Epoch 0023 | Train Loss: 0.144673 | Val Loss: 0.154949
+  Epoch 0024 | Train Loss: 0.144306 | Val Loss: 0.154494
+  Epoch 0025 | Train Loss: 0.143664 | Val Loss: 0.153305
+  Epoch 0026 | Train Loss: 0.142317 | Val Loss: 0.154212
+  Epoch 0027 | Train Loss: 0.141617 | Val Loss: 0.153871
+  Epoch 0028 | Train Loss: 0.141791 | Val Loss: 0.151848
+  Epoch 0029 | Train Loss: 0.140707 | Val Loss: 0.154060
+  Epoch 0030 | Train Loss: 0.140011 | Val Loss: 0.153475
+  Epoch 0031 | Train Loss: 0.139819 | Val Loss: 0.153013
+  Epoch 0032 | Train Loss: 0.138474 | Val Loss: 0.151768
+  Epoch 0033 | Train Loss: 0.137529 | Val Loss: 0.152011
+  Epoch 0034 | Train Loss: 0.136700 | Val Loss: 0.151998
+  Epoch 0035 | Train Loss: 0.136473 | Val Loss: 0.150794
+  Epoch 0036 | Train Loss: 0.134916 | Val Loss: 0.154068
+  Epoch 0037 | Train Loss: 0.134473 | Val Loss: 0.154522
+  Epoch 0038 | Train Loss: 0.133710 | Val Loss: 0.150872
+  Epoch 0039 | Train Loss: 0.132860 | Val Loss: 0.152177
+  Epoch 0040 | Train Loss: 0.132889 | Val Loss: 0.152884
+  Epoch 0041 | Train Loss: 0.132357 | Val Loss: 0.152805
+  Epoch 0042 | Train Loss: 0.131257 | Val Loss: 0.151822
+  Epoch 0043 | Train Loss: 0.130201 | Val Loss: 0.154006
+  Epoch 0044 | Train Loss: 0.129568 | Val Loss: 0.152617
+  Epoch 0045 | Train Loss: 0.129029 | Val Loss: 0.152058
+  Epoch 0046 | Train Loss: 0.130308 | Val Loss: 0.151186
+  Epoch 0047 | Train Loss: 0.127635 | Val Loss: 0.151790
+  Epoch 0048 | Train Loss: 0.126214 | Val Loss: 0.152568
+  Epoch 0049 | Train Loss: 0.126429 | Val Loss: 0.152262
+  Epoch 0050 | Train Loss: 0.126055 | Val Loss: 0.151759
+  Epoch 0051 | Train Loss: 0.125904 | Val Loss: 0.152580
+  Epoch 0052 | Train Loss: 0.125323 | Val Loss: 0.154394
+  Epoch 0053 | Train Loss: 0.125793 | Val Loss: 0.152803
+  Epoch 0054 | Train Loss: 0.123596 | Val Loss: 0.152850
+  Epoch 0055 | Train Loss: 0.123125 | Val Loss: 0.152387
+  Epoch 0056 | Train Loss: 0.122827 | Val Loss: 0.154214
+  Epoch 0057 | Train Loss: 0.122193 | Val Loss: 0.153060
+  Epoch 0058 | Train Loss: 0.121824 | Val Loss: 0.153196
+  Epoch 0059 | Train Loss: 0.120399 | Val Loss: 0.152866
+  Epoch 0060 | Train Loss: 0.119695 | Val Loss: 0.152082
+  Epoch 0061 | Train Loss: 0.120577 | Val Loss: 0.153051
+  Epoch 0062 | Train Loss: 0.119426 | Val Loss: 0.154195
+  Epoch 0063 | Train Loss: 0.119147 | Val Loss: 0.153227
+  Epoch 0064 | Train Loss: 0.118103 | Val Loss: 0.152754
+  Epoch 0065 | Train Loss: 0.117899 | Val Loss: 0.153286
+  Epoch 0066 | Train Loss: 0.115719 | Val Loss: 0.153076
+  Epoch 0067 | Train Loss: 0.115486 | Val Loss: 0.155225
+  Epoch 0068 | Train Loss: 0.115239 | Val Loss: 0.153860
+  Epoch 0069 | Train Loss: 0.115269 | Val Loss: 0.153597
+  Epoch 0070 | Train Loss: 0.115153 | Val Loss: 0.153877
+  Epoch 0071 | Train Loss: 0.114492 | Val Loss: 0.154157
+  Epoch 0072 | Train Loss: 0.113938 | Val Loss: 0.155088
+  Epoch 0073 | Train Loss: 0.113480 | Val Loss: 0.155099
+  Epoch 0074 | Train Loss: 0.113008 | Val Loss: 0.154356
+  Epoch 0075 | Train Loss: 0.111839 | Val Loss: 0.155622
+  Epoch 0076 | Train Loss: 0.113107 | Val Loss: 0.154862
+  Epoch 0077 | Train Loss: 0.111313 | Val Loss: 0.154947
+  Epoch 0078 | Train Loss: 0.111526 | Val Loss: 0.155472
+  Epoch 0079 | Train Loss: 0.111106 | Val Loss: 0.156303
+  Epoch 0080 | Train Loss: 0.110367 | Val Loss: 0.155674
+  Epoch 0081 | Train Loss: 0.111277 | Val Loss: 0.155619
+  Epoch 0082 | Train Loss: 0.109216 | Val Loss: 0.155532
+  Epoch 0083 | Train Loss: 0.111034 | Val Loss: 0.154935
+  Epoch 0084 | Train Loss: 0.108991 | Val Loss: 0.155682
+  Epoch 0085 | Train Loss: 0.108852 | Val Loss: 0.155516
+  Epoch 0086 | Train Loss: 0.108801 | Val Loss: 0.154602
+  Epoch 0087 | Train Loss: 0.108600 | Val Loss: 0.155591
+  Epoch 0088 | Train Loss: 0.108775 | Val Loss: 0.156025
+  Epoch 0089 | Train Loss: 0.108182 | Val Loss: 0.155872
+  Epoch 0090 | Train Loss: 0.108606 | Val Loss: 0.155316
+  Epoch 0091 | Train Loss: 0.108340 | Val Loss: 0.155352
+  Epoch 0092 | Train Loss: 0.107790 | Val Loss: 0.157012
+  Epoch 0093 | Train Loss: 0.108666 | Val Loss: 0.154935
+  Epoch 0094 | Train Loss: 0.107739 | Val Loss: 0.155710
+  Epoch 0095 | Train Loss: 0.108003 | Val Loss: 0.156131
+  Epoch 0096 | Train Loss: 0.106659 | Val Loss: 0.156724
+  Epoch 0097 | Train Loss: 0.107998 | Val Loss: 0.155259
+  Epoch 0098 | Train Loss: 0.107665 | Val Loss: 0.156089
+  Epoch 0099 | Train Loss: 0.107971 | Val Loss: 0.155622
+  Epoch 0100 | Train Loss: 0.107469 | Val Loss: 0.156071
+
+============================================================
+  BEST RESULTS
+============================================================
+  epoch: 35
+  val_loss: 0.15079421863744133
+  checkpoint: checkpoints/best_model_autoencoder_fourier_only_20260327_102957.pth
