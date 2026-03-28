@@ -6,6 +6,7 @@ import torch.optim as optim
 import torch.nn.functional as F
 from pathlib import Path
 from torchvision.models import vgg16
+from torch.cuda.amp import autocast, GradScaler
 
 from src.models.autoencoder import ConvAutoencoder
 from src.utils.preprocessing import CompressionDataset, get_dataloaders
@@ -92,6 +93,7 @@ class Trainer:
         weight_decay: float = 1e-5,
         alpha: float = 1.0,
         beta: float = 0.1,
+        num_workers: int = 0,
         splits: tuple = (0.70, 0.15, 0.15),
         seed: int = 42,
         train_restriction: str = None,
@@ -142,9 +144,11 @@ class Trainer:
         self.checkpoints_dir = Path(checkpoints_dir)
         self.image_size = image_size
         self.batch_size = batch_size
+        self.num_workers = num_workers
         self.splits = splits
         self.seed = seed
         self.train_restriction = train_restriction
+        
         
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
         self.checkpoint_name = f"{checkpoint_name}_{timestamp}.pth"
@@ -156,6 +160,8 @@ class Trainer:
             self.device = torch.device("cuda")
         else:
             self.device = torch.device("cpu")
+            
+        self.scaler = torch.amp.GradScaler(str(self.device))
 
         # Model — logger passed here to capture architecture
         self.logger = model.logger
@@ -225,6 +231,7 @@ class Trainer:
             splits=self.splits,
             batch_size=self.batch_size,
             seed=self.seed,
+            num_workers=self.num_workers,
         )
 
         self.logger.log_dataset(
@@ -267,14 +274,19 @@ class Trainer:
         for compressed, original in self.train_loader:
             compressed = compressed.to(self.device)
             original = original.to(self.device)
-
+            
             self.optimizer.zero_grad()
-            recon, _ = self.model(compressed)
-            loss = self.criterion(recon, original)
-            loss.backward()
-            self.optimizer.step()
+            
+            with torch.amp.autocast(str(self.device)):
+                recon, _ = self.model(compressed)
+                loss = self.criterion(recon, original)
+                
+            self.scaler.scale(loss).backward()
+            self.scaler.step(self.optimizer)
+            self.scaler.update()
+            
             total_loss += loss.item()
-
+            
         return total_loss / len(self.train_loader)
 
     def _validate_epoch(self) -> float:
