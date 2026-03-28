@@ -10,6 +10,7 @@ from skimage.metrics import structural_similarity as calc_ssim
 def make_output_name(
     compressed_path: Path,
     model_path: Path,
+    model_type: str,
     model_labels: dict[Path, str] | None = None,
 ) -> str:
     """
@@ -26,11 +27,13 @@ def make_output_name(
         falls back to model_path.stem.
     """
     compressed_stem = compressed_path.stem
+    
     if model_labels is not None:
         model_label = model_labels.get(model_path, model_path.stem)
     else:
         model_label = model_path.stem
-    return f"restored_{compressed_stem}_{model_label}.png"
+        
+    return f"restored_{model_type}_{compressed_stem}_{model_label}.png"
 
 
 def plot_restoration(
@@ -102,8 +105,10 @@ def plot_restoration_comparation_between_models(
     compressions: list[dict],
     model_paths: list[Path],
     model_display_labels: list[str] | None = None,
+    model_type: str = None,
     model_save_labels: dict[Path, str] | None = None,
     figsize_per_cell: tuple = (4, 4),
+    title: str = "Restoration comparison across compressions and models",
 ) -> None:
     """
     Plots a grid comparing restorations across compressions and models.
@@ -192,7 +197,7 @@ def plot_restoration_comparation_between_models(
         for col_idx, (model_path, label) in enumerate(
             zip(model_paths, model_display_labels), start=1
         ):
-            out_name = make_output_name(compressed_path, model_path, model_labels_dict)
+            out_name = make_output_name(compressed_path, model_path, model_type, model_labels_dict)
             restored = load(compressed_path.parent / out_name)
             psnr_r, ssim_r = metrics(original, restored)
             restored_metrics_row.append((psnr_r, ssim_r))
@@ -207,7 +212,7 @@ def plot_restoration_comparation_between_models(
             axes[row_idx, col_idx].axis("off")
 
     plt.suptitle(
-        "Restoration comparison across compressions and models",
+        title,
         fontsize=12,
         fontweight="bold",
         y=1.01,
