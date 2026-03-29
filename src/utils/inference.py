@@ -1,5 +1,3 @@
-# src/utils/inference.py
-
 from PIL import Image
 from torchvision import transforms
 import torch

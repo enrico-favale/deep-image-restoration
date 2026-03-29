@@ -187,19 +187,20 @@ class Trainer:
         )
 
         # Log hyperparameters
-        self.logger.log_hyperparameters(
-            base_channels=getattr(self.model, 'base_channels', None),
-            num_blocks=getattr(self.model, 'num_blocks', None),
-            image_size=image_size,
-            batch_size=batch_size,
-            learning_rate=learning_rate,
-            weight_decay=weight_decay,
-            loss_fn=f"MSE (alpha={alpha}) + Perceptual VGG16 (beta={beta})",
-            optimizer="Adam",
-            # scheduler="ReduceLROnPlateau (mode='min', patience=5, factor=0.5)",
-            scheduler="CosineAnnealingLR (T_max=100, eta_min=1e-6)",
-            device=str(self.device),
-        )
+        if self.logger is not None:
+            self.logger.log_hyperparameters(
+                base_channels=getattr(self.model, 'base_channels', None),
+                num_blocks=getattr(self.model, 'num_blocks', None),
+                image_size=image_size,
+                batch_size=batch_size,
+                learning_rate=learning_rate,
+                weight_decay=weight_decay,
+                loss_fn=f"MSE (alpha={alpha}) + Perceptual VGG16 (beta={beta})",
+                optimizer="Adam",
+                # scheduler="ReduceLROnPlateau (mode='min', patience=5, factor=0.5)",
+                scheduler="CosineAnnealingLR (T_max=100, eta_min=1e-6)",
+                device=str(self.device),
+            )
 
         # Populated by load_dataset()
         self.dataset = None
@@ -234,17 +235,18 @@ class Trainer:
             num_workers=self.num_workers,
         )
 
-        self.logger.log_dataset(
-            input_dir=str(self.input_dir),
-            compressed_dir=str(self.compressed_dir),
-            total_samples=len(self.dataset),
-            train_samples=len(self.train_loader.dataset),
-            val_samples=len(self.val_loader.dataset),
-            test_samples=len(self.test_loader.dataset),
-            image_size=self.image_size,
-            splits=self.splits,
-            seed=self.seed,
-        )
+        if self.logger is not None:
+            self.logger.log_dataset(
+                input_dir=str(self.input_dir),
+                compressed_dir=str(self.compressed_dir),
+                total_samples=len(self.dataset),
+                train_samples=len(self.train_loader.dataset),
+                val_samples=len(self.val_loader.dataset),
+                test_samples=len(self.test_loader.dataset),
+                image_size=self.image_size,
+                splits=self.splits,
+                seed=self.seed,
+            )
 
         print(f"Device : {self.device}")
         print(f"Parameters : {self.model.count_parameters():,}")
@@ -349,11 +351,12 @@ class Trainer:
             self.history["train_loss"].append(avg_train_loss)
             self.history["val_loss"].append(avg_val_loss)
 
-            self.logger.log_epoch(
-                epoch=epoch,
-                train_loss=avg_train_loss,
-                val_loss=avg_val_loss,
-            )
+            if self.logger is not None:
+                self.logger.log_epoch(
+                    epoch=epoch,
+                    train_loss=avg_train_loss,
+                    val_loss=avg_val_loss,
+                )
 
             if avg_val_loss < best_val_loss:
                 best_val_loss = avg_val_loss
@@ -362,11 +365,13 @@ class Trainer:
                     self.model.state_dict(),
                     self.checkpoints_dir / self.checkpoint_name,
                 )
-                self.logger.log_best_results(
-                    epoch=best_epoch,
-                    val_loss=best_val_loss,
-                    checkpoint=str(self.checkpoints_dir / self.checkpoint_name),
-                )
+                
+                if self.logger is not None:
+                    self.logger.log_best_results(
+                        epoch=best_epoch,
+                        val_loss=best_val_loss,
+                        checkpoint=str(self.checkpoints_dir / self.checkpoint_name),
+                    )
 
             if epoch % 10 == 0 or epoch == 1:
                 print(
@@ -380,6 +385,6 @@ class Trainer:
         )
         print(f"Checkpoint saved: {self.checkpoints_dir / self.checkpoint_name}")
 
-        self.logger.save()
+        if self.logger is not None: self.logger.save()
 
         return self.history
