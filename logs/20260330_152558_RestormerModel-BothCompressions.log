@@ -1,0 +1,951 @@
+EXPERIMENT LOG — 2026-03-30 16:05:42
+Description: RestormerModel-BothCompressions
+
+============================================================
+  ARCHITECTURE
+============================================================
+Model: RestormerModel
+RestormerModel(
+  (net): Restormer(
+    (patch_embed): OverlapPatchEmbed(
+      (proj): Conv2d(3, 48, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+    )
+    (encoder_level1): Sequential(
+      (0): TransformerBlock(
+        (norm1): LayerNorm(
+          (body): WithBias_LayerNorm()
+        )
+        (attn): Attention(
+          (qkv): Conv2d(48, 144, kernel_size=(1, 1), stride=(1, 1), bias=False)
+          (qkv_dwconv): Conv2d(144, 144, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=144, bias=False)
+          (project_out): Conv2d(48, 48, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        )
+        (norm2): LayerNorm(
+          (body): WithBias_LayerNorm()
+        )
+        (ffn): FeedForward(
+          (project_in): Conv2d(48, 254, kernel_size=(1, 1), stride=(1, 1), bias=False)
+          (dwconv): Conv2d(254, 254, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=254, bias=False)
+          (project_out): Conv2d(127, 48, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        )
+      )
+      (1): TransformerBlock(
+        (norm1): LayerNorm(
+          (body): WithBias_LayerNorm()
+        )
+        (attn): Attention(
+          (qkv): Conv2d(48, 144, kernel_size=(1, 1), stride=(1, 1), bias=False)
+          (qkv_dwconv): Conv2d(144, 144, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=144, bias=False)
+          (project_out): Conv2d(48, 48, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        )
+        (norm2): LayerNorm(
+          (body): WithBias_LayerNorm()
+        )
+        (ffn): FeedForward(
+          (project_in): Conv2d(48, 254, kernel_size=(1, 1), stride=(1, 1), bias=False)
+          (dwconv): Conv2d(254, 254, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=254, bias=False)
+          (project_out): Conv2d(127, 48, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        )
+      )
+      (2): TransformerBlock(
+        (norm1): LayerNorm(
+          (body): WithBias_LayerNorm()
+        )
+        (attn): Attention(
+          (qkv): Conv2d(48, 144, kernel_size=(1, 1), stride=(1, 1), bias=False)
+          (qkv_dwconv): Conv2d(144, 144, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=144, bias=False)
+          (project_out): Conv2d(48, 48, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        )
+        (norm2): LayerNorm(
+          (body): WithBias_LayerNorm()
+        )
+        (ffn): FeedForward(
+          (project_in): Conv2d(48, 254, kernel_size=(1, 1), stride=(1, 1), bias=False)
+          (dwconv): Conv2d(254, 254, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=254, bias=False)
+          (project_out): Conv2d(127, 48, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        )
+      )
+      (3): TransformerBlock(
+        (norm1): LayerNorm(
+          (body): WithBias_LayerNorm()
+        )
+        (attn): Attention(
+          (qkv): Conv2d(48, 144, kernel_size=(1, 1), stride=(1, 1), bias=False)
+          (qkv_dwconv): Conv2d(144, 144, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=144, bias=False)
+          (project_out): Conv2d(48, 48, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        )
+        (norm2): LayerNorm(
+          (body): WithBias_LayerNorm()
+        )
+        (ffn): FeedForward(
+          (project_in): Conv2d(48, 254, kernel_size=(1, 1), stride=(1, 1), bias=False)
+          (dwconv): Conv2d(254, 254, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=254, bias=False)
+          (project_out): Conv2d(127, 48, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        )
+      )
+    )
+    (down1_2): Downsample(
+      (body): Sequential(
+        (0): Conv2d(48, 24, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+        (1): PixelUnshuffle(downscale_factor=2)
+      )
+    )
+    (encoder_level2): Sequential(
+      (0): TransformerBlock(
+        (norm1): LayerNorm(
+          (body): WithBias_LayerNorm()
+        )
+        (attn): Attention(
+          (qkv): Conv2d(96, 288, kernel_size=(1, 1), stride=(1, 1), bias=False)
+          (qkv_dwconv): Conv2d(288, 288, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=288, bias=False)
+          (project_out): Conv2d(96, 96, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        )
+        (norm2): LayerNorm(
+          (body): WithBias_LayerNorm()
+        )
+        (ffn): FeedForward(
+          (project_in): Conv2d(96, 510, kernel_size=(1, 1), stride=(1, 1), bias=False)
+          (dwconv): Conv2d(510, 510, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=510, bias=False)
+          (project_out): Conv2d(255, 96, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        )
+      )
+      (1): TransformerBlock(
+        (norm1): LayerNorm(
+          (body): WithBias_LayerNorm()
+        )
+        (attn): Attention(
+          (qkv): Conv2d(96, 288, kernel_size=(1, 1), stride=(1, 1), bias=False)
+          (qkv_dwconv): Conv2d(288, 288, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=288, bias=False)
+          (project_out): Conv2d(96, 96, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        )
+        (norm2): LayerNorm(
+          (body): WithBias_LayerNorm()
+        )
+        (ffn): FeedForward(
+          (project_in): Conv2d(96, 510, kernel_size=(1, 1), stride=(1, 1), bias=False)
+          (dwconv): Conv2d(510, 510, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=510, bias=False)
+          (project_out): Conv2d(255, 96, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        )
+      )
+      (2): TransformerBlock(
+        (norm1): LayerNorm(
+          (body): WithBias_LayerNorm()
+        )
+        (attn): Attention(
+          (qkv): Conv2d(96, 288, kernel_size=(1, 1), stride=(1, 1), bias=False)
+          (qkv_dwconv): Conv2d(288, 288, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=288, bias=False)
+          (project_out): Conv2d(96, 96, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        )
+        (norm2): LayerNorm(
+          (body): WithBias_LayerNorm()
+        )
+        (ffn): FeedForward(
+          (project_in): Conv2d(96, 510, kernel_size=(1, 1), stride=(1, 1), bias=False)
+          (dwconv): Conv2d(510, 510, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=510, bias=False)
+          (project_out): Conv2d(255, 96, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        )
+      )
+      (3): TransformerBlock(
+        (norm1): LayerNorm(
+          (body): WithBias_LayerNorm()
+        )
+        (attn): Attention(
+          (qkv): Conv2d(96, 288, kernel_size=(1, 1), stride=(1, 1), bias=False)
+          (qkv_dwconv): Conv2d(288, 288, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=288, bias=False)
+          (project_out): Conv2d(96, 96, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        )
+        (norm2): LayerNorm(
+          (body): WithBias_LayerNorm()
+        )
+        (ffn): FeedForward(
+          (project_in): Conv2d(96, 510, kernel_size=(1, 1), stride=(1, 1), bias=False)
+          (dwconv): Conv2d(510, 510, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=510, bias=False)
+          (project_out): Conv2d(255, 96, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        )
+      )
+      (4): TransformerBlock(
+        (norm1): LayerNorm(
+          (body): WithBias_LayerNorm()
+        )
+        (attn): Attention(
+          (qkv): Conv2d(96, 288, kernel_size=(1, 1), stride=(1, 1), bias=False)
+          (qkv_dwconv): Conv2d(288, 288, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=288, bias=False)
+          (project_out): Conv2d(96, 96, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        )
+        (norm2): LayerNorm(
+          (body): WithBias_LayerNorm()
+        )
+        (ffn): FeedForward(
+          (project_in): Conv2d(96, 510, kernel_size=(1, 1), stride=(1, 1), bias=False)
+          (dwconv): Conv2d(510, 510, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=510, bias=False)
+          (project_out): Conv2d(255, 96, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        )
+      )
+      (5): TransformerBlock(
+        (norm1): LayerNorm(
+          (body): WithBias_LayerNorm()
+        )
+        (attn): Attention(
+          (qkv): Conv2d(96, 288, kernel_size=(1, 1), stride=(1, 1), bias=False)
+          (qkv_dwconv): Conv2d(288, 288, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=288, bias=False)
+          (project_out): Conv2d(96, 96, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        )
+        (norm2): LayerNorm(
+          (body): WithBias_LayerNorm()
+        )
+        (ffn): FeedForward(
+          (project_in): Conv2d(96, 510, kernel_size=(1, 1), stride=(1, 1), bias=False)
+          (dwconv): Conv2d(510, 510, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=510, bias=False)
+          (project_out): Conv2d(255, 96, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        )
+      )
+    )
+    (down2_3): Downsample(
+      (body): Sequential(
+        (0): Conv2d(96, 48, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+        (1): PixelUnshuffle(downscale_factor=2)
+      )
+    )
+    (encoder_level3): Sequential(
+      (0): TransformerBlock(
+        (norm1): LayerNorm(
+          (body): WithBias_LayerNorm()
+        )
+        (attn): Attention(
+          (qkv): Conv2d(192, 576, kernel_size=(1, 1), stride=(1, 1), bias=False)
+          (qkv_dwconv): Conv2d(576, 576, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=576, bias=False)
+          (project_out): Conv2d(192, 192, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        )
+        (norm2): LayerNorm(
+          (body): WithBias_LayerNorm()
+        )
+        (ffn): FeedForward(
+          (project_in): Conv2d(192, 1020, kernel_size=(1, 1), stride=(1, 1), bias=False)
+          (dwconv): Conv2d(1020, 1020, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=1020, bias=False)
+          (project_out): Conv2d(510, 192, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        )
+      )
+      (1): TransformerBlock(
+        (norm1): LayerNorm(
+          (body): WithBias_LayerNorm()
+        )
+        (attn): Attention(
+          (qkv): Conv2d(192, 576, kernel_size=(1, 1), stride=(1, 1), bias=False)
+          (qkv_dwconv): Conv2d(576, 576, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=576, bias=False)
+          (project_out): Conv2d(192, 192, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        )
+        (norm2): LayerNorm(
+          (body): WithBias_LayerNorm()
+        )
+        (ffn): FeedForward(
+          (project_in): Conv2d(192, 1020, kernel_size=(1, 1), stride=(1, 1), bias=False)
+          (dwconv): Conv2d(1020, 1020, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=1020, bias=False)
+          (project_out): Conv2d(510, 192, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        )
+      )
+      (2): TransformerBlock(
+        (norm1): LayerNorm(
+          (body): WithBias_LayerNorm()
+        )
+        (attn): Attention(
+          (qkv): Conv2d(192, 576, kernel_size=(1, 1), stride=(1, 1), bias=False)
+          (qkv_dwconv): Conv2d(576, 576, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=576, bias=False)
+          (project_out): Conv2d(192, 192, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        )
+        (norm2): LayerNorm(
+          (body): WithBias_LayerNorm()
+        )
+        (ffn): FeedForward(
+          (project_in): Conv2d(192, 1020, kernel_size=(1, 1), stride=(1, 1), bias=False)
+          (dwconv): Conv2d(1020, 1020, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=1020, bias=False)
+          (project_out): Conv2d(510, 192, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        )
+      )
+      (3): TransformerBlock(
+        (norm1): LayerNorm(
+          (body): WithBias_LayerNorm()
+        )
+        (attn): Attention(
+          (qkv): Conv2d(192, 576, kernel_size=(1, 1), stride=(1, 1), bias=False)
+          (qkv_dwconv): Conv2d(576, 576, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=576, bias=False)
+          (project_out): Conv2d(192, 192, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        )
+        (norm2): LayerNorm(
+          (body): WithBias_LayerNorm()
+        )
+        (ffn): FeedForward(
+          (project_in): Conv2d(192, 1020, kernel_size=(1, 1), stride=(1, 1), bias=False)
+          (dwconv): Conv2d(1020, 1020, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=1020, bias=False)
+          (project_out): Conv2d(510, 192, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        )
+      )
+      (4): TransformerBlock(
+        (norm1): LayerNorm(
+          (body): WithBias_LayerNorm()
+        )
+        (attn): Attention(
+          (qkv): Conv2d(192, 576, kernel_size=(1, 1), stride=(1, 1), bias=False)
+          (qkv_dwconv): Conv2d(576, 576, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=576, bias=False)
+          (project_out): Conv2d(192, 192, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        )
+        (norm2): LayerNorm(
+          (body): WithBias_LayerNorm()
+        )
+        (ffn): FeedForward(
+          (project_in): Conv2d(192, 1020, kernel_size=(1, 1), stride=(1, 1), bias=False)
+          (dwconv): Conv2d(1020, 1020, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=1020, bias=False)
+          (project_out): Conv2d(510, 192, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        )
+      )
+      (5): TransformerBlock(
+        (norm1): LayerNorm(
+          (body): WithBias_LayerNorm()
+        )
+        (attn): Attention(
+          (qkv): Conv2d(192, 576, kernel_size=(1, 1), stride=(1, 1), bias=False)
+          (qkv_dwconv): Conv2d(576, 576, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=576, bias=False)
+          (project_out): Conv2d(192, 192, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        )
+        (norm2): LayerNorm(
+          (body): WithBias_LayerNorm()
+        )
+        (ffn): FeedForward(
+          (project_in): Conv2d(192, 1020, kernel_size=(1, 1), stride=(1, 1), bias=False)
+          (dwconv): Conv2d(1020, 1020, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=1020, bias=False)
+          (project_out): Conv2d(510, 192, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        )
+      )
+    )
+    (down3_4): Downsample(
+      (body): Sequential(
+        (0): Conv2d(192, 96, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+        (1): PixelUnshuffle(downscale_factor=2)
+      )
+    )
+    (latent): Sequential(
+      (0): TransformerBlock(
+        (norm1): LayerNorm(
+          (body): WithBias_LayerNorm()
+        )
+        (attn): Attention(
+          (qkv): Conv2d(384, 1152, kernel_size=(1, 1), stride=(1, 1), bias=False)
+          (qkv_dwconv): Conv2d(1152, 1152, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=1152, bias=False)
+          (project_out): Conv2d(384, 384, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        )
+        (norm2): LayerNorm(
+          (body): WithBias_LayerNorm()
+        )
+        (ffn): FeedForward(
+          (project_in): Conv2d(384, 2042, kernel_size=(1, 1), stride=(1, 1), bias=False)
+          (dwconv): Conv2d(2042, 2042, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=2042, bias=False)
+          (project_out): Conv2d(1021, 384, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        )
+      )
+      (1): TransformerBlock(
+        (norm1): LayerNorm(
+          (body): WithBias_LayerNorm()
+        )
+        (attn): Attention(
+          (qkv): Conv2d(384, 1152, kernel_size=(1, 1), stride=(1, 1), bias=False)
+          (qkv_dwconv): Conv2d(1152, 1152, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=1152, bias=False)
+          (project_out): Conv2d(384, 384, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        )
+        (norm2): LayerNorm(
+          (body): WithBias_LayerNorm()
+        )
+        (ffn): FeedForward(
+          (project_in): Conv2d(384, 2042, kernel_size=(1, 1), stride=(1, 1), bias=False)
+          (dwconv): Conv2d(2042, 2042, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=2042, bias=False)
+          (project_out): Conv2d(1021, 384, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        )
+      )
+      (2): TransformerBlock(
+        (norm1): LayerNorm(
+          (body): WithBias_LayerNorm()
+        )
+        (attn): Attention(
+          (qkv): Conv2d(384, 1152, kernel_size=(1, 1), stride=(1, 1), bias=False)
+          (qkv_dwconv): Conv2d(1152, 1152, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=1152, bias=False)
+          (project_out): Conv2d(384, 384, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        )
+        (norm2): LayerNorm(
+          (body): WithBias_LayerNorm()
+        )
+        (ffn): FeedForward(
+          (project_in): Conv2d(384, 2042, kernel_size=(1, 1), stride=(1, 1), bias=False)
+          (dwconv): Conv2d(2042, 2042, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=2042, bias=False)
+          (project_out): Conv2d(1021, 384, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        )
+      )
+      (3): TransformerBlock(
+        (norm1): LayerNorm(
+          (body): WithBias_LayerNorm()
+        )
+        (attn): Attention(
+          (qkv): Conv2d(384, 1152, kernel_size=(1, 1), stride=(1, 1), bias=False)
+          (qkv_dwconv): Conv2d(1152, 1152, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=1152, bias=False)
+          (project_out): Conv2d(384, 384, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        )
+        (norm2): LayerNorm(
+          (body): WithBias_LayerNorm()
+        )
+        (ffn): FeedForward(
+          (project_in): Conv2d(384, 2042, kernel_size=(1, 1), stride=(1, 1), bias=False)
+          (dwconv): Conv2d(2042, 2042, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=2042, bias=False)
+          (project_out): Conv2d(1021, 384, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        )
+      )
+      (4): TransformerBlock(
+        (norm1): LayerNorm(
+          (body): WithBias_LayerNorm()
+        )
+        (attn): Attention(
+          (qkv): Conv2d(384, 1152, kernel_size=(1, 1), stride=(1, 1), bias=False)
+          (qkv_dwconv): Conv2d(1152, 1152, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=1152, bias=False)
+          (project_out): Conv2d(384, 384, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        )
+        (norm2): LayerNorm(
+          (body): WithBias_LayerNorm()
+        )
+        (ffn): FeedForward(
+          (project_in): Conv2d(384, 2042, kernel_size=(1, 1), stride=(1, 1), bias=False)
+          (dwconv): Conv2d(2042, 2042, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=2042, bias=False)
+          (project_out): Conv2d(1021, 384, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        )
+      )
+      (5): TransformerBlock(
+        (norm1): LayerNorm(
+          (body): WithBias_LayerNorm()
+        )
+        (attn): Attention(
+          (qkv): Conv2d(384, 1152, kernel_size=(1, 1), stride=(1, 1), bias=False)
+          (qkv_dwconv): Conv2d(1152, 1152, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=1152, bias=False)
+          (project_out): Conv2d(384, 384, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        )
+        (norm2): LayerNorm(
+          (body): WithBias_LayerNorm()
+        )
+        (ffn): FeedForward(
+          (project_in): Conv2d(384, 2042, kernel_size=(1, 1), stride=(1, 1), bias=False)
+          (dwconv): Conv2d(2042, 2042, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=2042, bias=False)
+          (project_out): Conv2d(1021, 384, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        )
+      )
+      (6): TransformerBlock(
+        (norm1): LayerNorm(
+          (body): WithBias_LayerNorm()
+        )
+        (attn): Attention(
+          (qkv): Conv2d(384, 1152, kernel_size=(1, 1), stride=(1, 1), bias=False)
+          (qkv_dwconv): Conv2d(1152, 1152, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=1152, bias=False)
+          (project_out): Conv2d(384, 384, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        )
+        (norm2): LayerNorm(
+          (body): WithBias_LayerNorm()
+        )
+        (ffn): FeedForward(
+          (project_in): Conv2d(384, 2042, kernel_size=(1, 1), stride=(1, 1), bias=False)
+          (dwconv): Conv2d(2042, 2042, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=2042, bias=False)
+          (project_out): Conv2d(1021, 384, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        )
+      )
+      (7): TransformerBlock(
+        (norm1): LayerNorm(
+          (body): WithBias_LayerNorm()
+        )
+        (attn): Attention(
+          (qkv): Conv2d(384, 1152, kernel_size=(1, 1), stride=(1, 1), bias=False)
+          (qkv_dwconv): Conv2d(1152, 1152, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=1152, bias=False)
+          (project_out): Conv2d(384, 384, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        )
+        (norm2): LayerNorm(
+          (body): WithBias_LayerNorm()
+        )
+        (ffn): FeedForward(
+          (project_in): Conv2d(384, 2042, kernel_size=(1, 1), stride=(1, 1), bias=False)
+          (dwconv): Conv2d(2042, 2042, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=2042, bias=False)
+          (project_out): Conv2d(1021, 384, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        )
+      )
+    )
+    (up4_3): Upsample(
+      (body): Sequential(
+        (0): Conv2d(384, 768, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+        (1): PixelShuffle(upscale_factor=2)
+      )
+    )
+    (reduce_chan_level3): Conv2d(384, 192, kernel_size=(1, 1), stride=(1, 1), bias=False)
+    (decoder_level3): Sequential(
+      (0): TransformerBlock(
+        (norm1): LayerNorm(
+          (body): WithBias_LayerNorm()
+        )
+        (attn): Attention(
+          (qkv): Conv2d(192, 576, kernel_size=(1, 1), stride=(1, 1), bias=False)
+          (qkv_dwconv): Conv2d(576, 576, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=576, bias=False)
+          (project_out): Conv2d(192, 192, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        )
+        (norm2): LayerNorm(
+          (body): WithBias_LayerNorm()
+        )
+        (ffn): FeedForward(
+          (project_in): Conv2d(192, 1020, kernel_size=(1, 1), stride=(1, 1), bias=False)
+          (dwconv): Conv2d(1020, 1020, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=1020, bias=False)
+          (project_out): Conv2d(510, 192, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        )
+      )
+      (1): TransformerBlock(
+        (norm1): LayerNorm(
+          (body): WithBias_LayerNorm()
+        )
+        (attn): Attention(
+          (qkv): Conv2d(192, 576, kernel_size=(1, 1), stride=(1, 1), bias=False)
+          (qkv_dwconv): Conv2d(576, 576, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=576, bias=False)
+          (project_out): Conv2d(192, 192, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        )
+        (norm2): LayerNorm(
+          (body): WithBias_LayerNorm()
+        )
+        (ffn): FeedForward(
+          (project_in): Conv2d(192, 1020, kernel_size=(1, 1), stride=(1, 1), bias=False)
+          (dwconv): Conv2d(1020, 1020, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=1020, bias=False)
+          (project_out): Conv2d(510, 192, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        )
+      )
+      (2): TransformerBlock(
+        (norm1): LayerNorm(
+          (body): WithBias_LayerNorm()
+        )
+        (attn): Attention(
+          (qkv): Conv2d(192, 576, kernel_size=(1, 1), stride=(1, 1), bias=False)
+          (qkv_dwconv): Conv2d(576, 576, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=576, bias=False)
+          (project_out): Conv2d(192, 192, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        )
+        (norm2): LayerNorm(
+          (body): WithBias_LayerNorm()
+        )
+        (ffn): FeedForward(
+          (project_in): Conv2d(192, 1020, kernel_size=(1, 1), stride=(1, 1), bias=False)
+          (dwconv): Conv2d(1020, 1020, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=1020, bias=False)
+          (project_out): Conv2d(510, 192, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        )
+      )
+      (3): TransformerBlock(
+        (norm1): LayerNorm(
+          (body): WithBias_LayerNorm()
+        )
+        (attn): Attention(
+          (qkv): Conv2d(192, 576, kernel_size=(1, 1), stride=(1, 1), bias=False)
+          (qkv_dwconv): Conv2d(576, 576, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=576, bias=False)
+          (project_out): Conv2d(192, 192, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        )
+        (norm2): LayerNorm(
+          (body): WithBias_LayerNorm()
+        )
+        (ffn): FeedForward(
+          (project_in): Conv2d(192, 1020, kernel_size=(1, 1), stride=(1, 1), bias=False)
+          (dwconv): Conv2d(1020, 1020, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=1020, bias=False)
+          (project_out): Conv2d(510, 192, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        )
+      )
+      (4): TransformerBlock(
+        (norm1): LayerNorm(
+          (body): WithBias_LayerNorm()
+        )
+        (attn): Attention(
+          (qkv): Conv2d(192, 576, kernel_size=(1, 1), stride=(1, 1), bias=False)
+          (qkv_dwconv): Conv2d(576, 576, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=576, bias=False)
+          (project_out): Conv2d(192, 192, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        )
+        (norm2): LayerNorm(
+          (body): WithBias_LayerNorm()
+        )
+        (ffn): FeedForward(
+          (project_in): Conv2d(192, 1020, kernel_size=(1, 1), stride=(1, 1), bias=False)
+          (dwconv): Conv2d(1020, 1020, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=1020, bias=False)
+          (project_out): Conv2d(510, 192, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        )
+      )
+      (5): TransformerBlock(
+        (norm1): LayerNorm(
+          (body): WithBias_LayerNorm()
+        )
+        (attn): Attention(
+          (qkv): Conv2d(192, 576, kernel_size=(1, 1), stride=(1, 1), bias=False)
+          (qkv_dwconv): Conv2d(576, 576, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=576, bias=False)
+          (project_out): Conv2d(192, 192, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        )
+        (norm2): LayerNorm(
+          (body): WithBias_LayerNorm()
+        )
+        (ffn): FeedForward(
+          (project_in): Conv2d(192, 1020, kernel_size=(1, 1), stride=(1, 1), bias=False)
+          (dwconv): Conv2d(1020, 1020, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=1020, bias=False)
+          (project_out): Conv2d(510, 192, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        )
+      )
+    )
+    (up3_2): Upsample(
+      (body): Sequential(
+        (0): Conv2d(192, 384, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+        (1): PixelShuffle(upscale_factor=2)
+      )
+    )
+    (reduce_chan_level2): Conv2d(192, 96, kernel_size=(1, 1), stride=(1, 1), bias=False)
+    (decoder_level2): Sequential(
+      (0): TransformerBlock(
+        (norm1): LayerNorm(
+          (body): WithBias_LayerNorm()
+        )
+        (attn): Attention(
+          (qkv): Conv2d(96, 288, kernel_size=(1, 1), stride=(1, 1), bias=False)
+          (qkv_dwconv): Conv2d(288, 288, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=288, bias=False)
+          (project_out): Conv2d(96, 96, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        )
+        (norm2): LayerNorm(
+          (body): WithBias_LayerNorm()
+        )
+        (ffn): FeedForward(
+          (project_in): Conv2d(96, 510, kernel_size=(1, 1), stride=(1, 1), bias=False)
+          (dwconv): Conv2d(510, 510, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=510, bias=False)
+          (project_out): Conv2d(255, 96, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        )
+      )
+      (1): TransformerBlock(
+        (norm1): LayerNorm(
+          (body): WithBias_LayerNorm()
+        )
+        (attn): Attention(
+          (qkv): Conv2d(96, 288, kernel_size=(1, 1), stride=(1, 1), bias=False)
+          (qkv_dwconv): Conv2d(288, 288, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=288, bias=False)
+          (project_out): Conv2d(96, 96, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        )
+        (norm2): LayerNorm(
+          (body): WithBias_LayerNorm()
+        )
+        (ffn): FeedForward(
+          (project_in): Conv2d(96, 510, kernel_size=(1, 1), stride=(1, 1), bias=False)
+          (dwconv): Conv2d(510, 510, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=510, bias=False)
+          (project_out): Conv2d(255, 96, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        )
+      )
+      (2): TransformerBlock(
+        (norm1): LayerNorm(
+          (body): WithBias_LayerNorm()
+        )
+        (attn): Attention(
+          (qkv): Conv2d(96, 288, kernel_size=(1, 1), stride=(1, 1), bias=False)
+          (qkv_dwconv): Conv2d(288, 288, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=288, bias=False)
+          (project_out): Conv2d(96, 96, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        )
+        (norm2): LayerNorm(
+          (body): WithBias_LayerNorm()
+        )
+        (ffn): FeedForward(
+          (project_in): Conv2d(96, 510, kernel_size=(1, 1), stride=(1, 1), bias=False)
+          (dwconv): Conv2d(510, 510, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=510, bias=False)
+          (project_out): Conv2d(255, 96, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        )
+      )
+      (3): TransformerBlock(
+        (norm1): LayerNorm(
+          (body): WithBias_LayerNorm()
+        )
+        (attn): Attention(
+          (qkv): Conv2d(96, 288, kernel_size=(1, 1), stride=(1, 1), bias=False)
+          (qkv_dwconv): Conv2d(288, 288, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=288, bias=False)
+          (project_out): Conv2d(96, 96, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        )
+        (norm2): LayerNorm(
+          (body): WithBias_LayerNorm()
+        )
+        (ffn): FeedForward(
+          (project_in): Conv2d(96, 510, kernel_size=(1, 1), stride=(1, 1), bias=False)
+          (dwconv): Conv2d(510, 510, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=510, bias=False)
+          (project_out): Conv2d(255, 96, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        )
+      )
+      (4): TransformerBlock(
+        (norm1): LayerNorm(
+          (body): WithBias_LayerNorm()
+        )
+        (attn): Attention(
+          (qkv): Conv2d(96, 288, kernel_size=(1, 1), stride=(1, 1), bias=False)
+          (qkv_dwconv): Conv2d(288, 288, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=288, bias=False)
+          (project_out): Conv2d(96, 96, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        )
+        (norm2): LayerNorm(
+          (body): WithBias_LayerNorm()
+        )
+        (ffn): FeedForward(
+          (project_in): Conv2d(96, 510, kernel_size=(1, 1), stride=(1, 1), bias=False)
+          (dwconv): Conv2d(510, 510, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=510, bias=False)
+          (project_out): Conv2d(255, 96, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        )
+      )
+      (5): TransformerBlock(
+        (norm1): LayerNorm(
+          (body): WithBias_LayerNorm()
+        )
+        (attn): Attention(
+          (qkv): Conv2d(96, 288, kernel_size=(1, 1), stride=(1, 1), bias=False)
+          (qkv_dwconv): Conv2d(288, 288, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=288, bias=False)
+          (project_out): Conv2d(96, 96, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        )
+        (norm2): LayerNorm(
+          (body): WithBias_LayerNorm()
+        )
+        (ffn): FeedForward(
+          (project_in): Conv2d(96, 510, kernel_size=(1, 1), stride=(1, 1), bias=False)
+          (dwconv): Conv2d(510, 510, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=510, bias=False)
+          (project_out): Conv2d(255, 96, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        )
+      )
+    )
+    (up2_1): Upsample(
+      (body): Sequential(
+        (0): Conv2d(96, 192, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+        (1): PixelShuffle(upscale_factor=2)
+      )
+    )
+    (decoder_level1): Sequential(
+      (0): TransformerBlock(
+        (norm1): LayerNorm(
+          (body): WithBias_LayerNorm()
+        )
+        (attn): Attention(
+          (qkv): Conv2d(96, 288, kernel_size=(1, 1), stride=(1, 1), bias=False)
+          (qkv_dwconv): Conv2d(288, 288, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=288, bias=False)
+          (project_out): Conv2d(96, 96, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        )
+        (norm2): LayerNorm(
+          (body): WithBias_LayerNorm()
+        )
+        (ffn): FeedForward(
+          (project_in): Conv2d(96, 510, kernel_size=(1, 1), stride=(1, 1), bias=False)
+          (dwconv): Conv2d(510, 510, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=510, bias=False)
+          (project_out): Conv2d(255, 96, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        )
+      )
+      (1): TransformerBlock(
+        (norm1): LayerNorm(
+          (body): WithBias_LayerNorm()
+        )
+        (attn): Attention(
+          (qkv): Conv2d(96, 288, kernel_size=(1, 1), stride=(1, 1), bias=False)
+          (qkv_dwconv): Conv2d(288, 288, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=288, bias=False)
+          (project_out): Conv2d(96, 96, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        )
+        (norm2): LayerNorm(
+          (body): WithBias_LayerNorm()
+        )
+        (ffn): FeedForward(
+          (project_in): Conv2d(96, 510, kernel_size=(1, 1), stride=(1, 1), bias=False)
+          (dwconv): Conv2d(510, 510, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=510, bias=False)
+          (project_out): Conv2d(255, 96, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        )
+      )
+      (2): TransformerBlock(
+        (norm1): LayerNorm(
+          (body): WithBias_LayerNorm()
+        )
+        (attn): Attention(
+          (qkv): Conv2d(96, 288, kernel_size=(1, 1), stride=(1, 1), bias=False)
+          (qkv_dwconv): Conv2d(288, 288, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=288, bias=False)
+          (project_out): Conv2d(96, 96, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        )
+        (norm2): LayerNorm(
+          (body): WithBias_LayerNorm()
+        )
+        (ffn): FeedForward(
+          (project_in): Conv2d(96, 510, kernel_size=(1, 1), stride=(1, 1), bias=False)
+          (dwconv): Conv2d(510, 510, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=510, bias=False)
+          (project_out): Conv2d(255, 96, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        )
+      )
+      (3): TransformerBlock(
+        (norm1): LayerNorm(
+          (body): WithBias_LayerNorm()
+        )
+        (attn): Attention(
+          (qkv): Conv2d(96, 288, kernel_size=(1, 1), stride=(1, 1), bias=False)
+          (qkv_dwconv): Conv2d(288, 288, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=288, bias=False)
+          (project_out): Conv2d(96, 96, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        )
+        (norm2): LayerNorm(
+          (body): WithBias_LayerNorm()
+        )
+        (ffn): FeedForward(
+          (project_in): Conv2d(96, 510, kernel_size=(1, 1), stride=(1, 1), bias=False)
+          (dwconv): Conv2d(510, 510, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=510, bias=False)
+          (project_out): Conv2d(255, 96, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        )
+      )
+    )
+    (refinement): Sequential(
+      (0): TransformerBlock(
+        (norm1): LayerNorm(
+          (body): WithBias_LayerNorm()
+        )
+        (attn): Attention(
+          (qkv): Conv2d(96, 288, kernel_size=(1, 1), stride=(1, 1), bias=False)
+          (qkv_dwconv): Conv2d(288, 288, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=288, bias=False)
+          (project_out): Conv2d(96, 96, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        )
+        (norm2): LayerNorm(
+          (body): WithBias_LayerNorm()
+        )
+        (ffn): FeedForward(
+          (project_in): Conv2d(96, 510, kernel_size=(1, 1), stride=(1, 1), bias=False)
+          (dwconv): Conv2d(510, 510, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=510, bias=False)
+          (project_out): Conv2d(255, 96, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        )
+      )
+      (1): TransformerBlock(
+        (norm1): LayerNorm(
+          (body): WithBias_LayerNorm()
+        )
+        (attn): Attention(
+          (qkv): Conv2d(96, 288, kernel_size=(1, 1), stride=(1, 1), bias=False)
+          (qkv_dwconv): Conv2d(288, 288, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=288, bias=False)
+          (project_out): Conv2d(96, 96, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        )
+        (norm2): LayerNorm(
+          (body): WithBias_LayerNorm()
+        )
+        (ffn): FeedForward(
+          (project_in): Conv2d(96, 510, kernel_size=(1, 1), stride=(1, 1), bias=False)
+          (dwconv): Conv2d(510, 510, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=510, bias=False)
+          (project_out): Conv2d(255, 96, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        )
+      )
+      (2): TransformerBlock(
+        (norm1): LayerNorm(
+          (body): WithBias_LayerNorm()
+        )
+        (attn): Attention(
+          (qkv): Conv2d(96, 288, kernel_size=(1, 1), stride=(1, 1), bias=False)
+          (qkv_dwconv): Conv2d(288, 288, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=288, bias=False)
+          (project_out): Conv2d(96, 96, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        )
+        (norm2): LayerNorm(
+          (body): WithBias_LayerNorm()
+        )
+        (ffn): FeedForward(
+          (project_in): Conv2d(96, 510, kernel_size=(1, 1), stride=(1, 1), bias=False)
+          (dwconv): Conv2d(510, 510, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=510, bias=False)
+          (project_out): Conv2d(255, 96, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        )
+      )
+      (3): TransformerBlock(
+        (norm1): LayerNorm(
+          (body): WithBias_LayerNorm()
+        )
+        (attn): Attention(
+          (qkv): Conv2d(96, 288, kernel_size=(1, 1), stride=(1, 1), bias=False)
+          (qkv_dwconv): Conv2d(288, 288, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=288, bias=False)
+          (project_out): Conv2d(96, 96, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        )
+        (norm2): LayerNorm(
+          (body): WithBias_LayerNorm()
+        )
+        (ffn): FeedForward(
+          (project_in): Conv2d(96, 510, kernel_size=(1, 1), stride=(1, 1), bias=False)
+          (dwconv): Conv2d(510, 510, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=510, bias=False)
+          (project_out): Conv2d(255, 96, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        )
+      )
+    )
+    (output): Conv2d(96, 3, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+  )
+)
+
+total params : 26,126,644
+
+============================================================
+  HYPERPARAMETERS
+============================================================
+  base_channels: None
+  num_blocks: None
+  image_size: 256
+  batch_size: 4
+  learning_rate: 0.001
+  weight_decay: 0.0001
+  loss_fn: MSE (alpha=1.0) + Perceptual VGG16 (beta=0.1)
+  optimizer: Adam
+  scheduler: CosineAnnealingLR (T_max=100, eta_min=1e-6)
+  device: cuda
+
+============================================================
+  DATASET
+============================================================
+  input_dir: data/resized
+  compressed_dir: data/compressed
+  total_samples: 1000
+  train_samples: 700
+  val_samples: 150
+  test_samples: 150
+  image_size: 256
+  splits: (0.7, 0.15, 0.15)
+  seed: 42
+
+============================================================
+  TRAINING LOG
+============================================================
+  Epoch 0001 | Train Loss: 0.282936 | Val Loss: 0.111743
+  Epoch 0002 | Train Loss: 0.117699 | Val Loss: 0.102908
+  Epoch 0003 | Train Loss: 0.110499 | Val Loss: 0.097969
+  Epoch 0004 | Train Loss: 0.106668 | Val Loss: 0.094982
+  Epoch 0005 | Train Loss: 0.104500 | Val Loss: 0.094225
+  Epoch 0006 | Train Loss: 0.102510 | Val Loss: 0.092013
+  Epoch 0007 | Train Loss: 0.101465 | Val Loss: 0.092614
+  Epoch 0008 | Train Loss: 0.100840 | Val Loss: 0.090870
+  Epoch 0009 | Train Loss: 0.100342 | Val Loss: 0.090417
+  Epoch 0010 | Train Loss: 0.099579 | Val Loss: 0.089484
+  Epoch 0011 | Train Loss: 0.099246 | Val Loss: 0.089727
+  Epoch 0012 | Train Loss: 0.098730 | Val Loss: 0.089991
+  Epoch 0013 | Train Loss: 0.098098 | Val Loss: 0.088640
+  Epoch 0014 | Train Loss: 0.097773 | Val Loss: 0.089193
+  Epoch 0015 | Train Loss: 0.097661 | Val Loss: 0.087503
+  Epoch 0016 | Train Loss: 0.096998 | Val Loss: 0.088500
+  Epoch 0017 | Train Loss: 0.097299 | Val Loss: 0.087855
+  Epoch 0018 | Train Loss: 0.097263 | Val Loss: 0.087180
+  Epoch 0019 | Train Loss: 0.097236 | Val Loss: 0.087039
+  Epoch 0020 | Train Loss: 0.096923 | Val Loss: 0.089246
+  Epoch 0021 | Train Loss: 0.096757 | Val Loss: 0.086887
+  Epoch 0022 | Train Loss: 0.097249 | Val Loss: 0.087135
+  Epoch 0023 | Train Loss: 0.096802 | Val Loss: 0.087265
+  Epoch 0024 | Train Loss: 0.096785 | Val Loss: 0.087163
+  Epoch 0025 | Train Loss: 0.097016 | Val Loss: 0.088125
+  Epoch 0026 | Train Loss: 0.097480 | Val Loss: 0.088598
+  Epoch 0027 | Train Loss: 0.097877 | Val Loss: 0.088751
+  Epoch 0028 | Train Loss: 0.098559 | Val Loss: 0.090775
+  Epoch 0029 | Train Loss: 0.098904 | Val Loss: 0.089170
+  Epoch 0030 | Train Loss: 0.103523 | Val Loss: 0.095247
+  Epoch 0031 | Train Loss: 0.107216 | Val Loss: 0.101172
+  Epoch 0032 | Train Loss: 0.109541 | Val Loss: 0.099340
+  Epoch 0033 | Train Loss: 0.112062 | Val Loss: 0.106923
+  Epoch 0034 | Train Loss: 0.114096 | Val Loss: 0.100405
+  Epoch 0035 | Train Loss: 0.114990 | Val Loss: 0.107922
+  Epoch 0036 | Train Loss: 0.116438 | Val Loss: 0.109791
+  Epoch 0037 | Train Loss: 0.117130 | Val Loss: 0.106241
+  Epoch 0038 | Train Loss: 0.116941 | Val Loss: 0.113241
+  Epoch 0039 | Train Loss: 0.117973 | Val Loss: 0.109133
+  Epoch 0040 | Train Loss: 0.118017 | Val Loss: 0.113187
+  Epoch 0041 | Train Loss: 0.115232 | Val Loss: 0.098124
+  Epoch 0042 | Train Loss: 0.108312 | Val Loss: 0.096340
+  Epoch 0043 | Train Loss: 0.108476 | Val Loss: 0.098697
+  Epoch 0044 | Train Loss: 0.106048 | Val Loss: 0.097832
+  Epoch 0045 | Train Loss: 0.104520 | Val Loss: 0.095736
+  Epoch 0046 | Train Loss: 0.104104 | Val Loss: 0.094326
+  Epoch 0047 | Train Loss: 0.103888 | Val Loss: 0.094065
+  Epoch 0048 | Train Loss: 0.103301 | Val Loss: 0.093810
+  Epoch 0049 | Train Loss: 0.103231 | Val Loss: 0.093367
+  Epoch 0050 | Train Loss: 0.102969 | Val Loss: 0.093612
+
+============================================================
+  BEST RESULTS
+============================================================
+  epoch: 21
+  val_loss: 0.086886583778419
+  checkpoint: checkpoints/best_model_restormer_20260330_152559.pth
